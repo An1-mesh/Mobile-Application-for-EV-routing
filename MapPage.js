@@ -154,6 +154,7 @@ const MapPage = () => {
   
   // Handle the press event on the map to add a new marker
   const handleMapPress = async (event) => {
+    const beginTime = new Date();
     try {
       // Extracting the coordinate from the event
       const { coordinate } = event.nativeEvent;
@@ -189,27 +190,27 @@ const MapPage = () => {
       }
 
       // Ensure that 'stations' property exists in the response
-    if (response && response.stations !== undefined) {
-      // Extract the 'stations' property from the response
-      const stations = response.stations;
-      console.log('Response stations in Map Press:', stations);
+      if (response && response.stations !== undefined) {
+        // Extract the 'stations' property from the response
+        const stations = response.stations;
+        console.log('Response stations in Map Press:', stations);
 
-      // Update the state with response stations
-      setResponseStations(stations);
+        // Update the state with response stations
+        setResponseStations(stations);
 
-      // Move the map to the first station
-      if (stations.length > 0 && mapRef.current) {
-        mapRef.current.animateToRegion({
-          latitude: stations[0].latitude,
-          longitude: stations[0].longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        });
-      } else {
-        // Handle the case where the response is invalid
-        console.log('No charging stations on path.');
+        // Move the map to the first station
+        if (stations.length > 0 && mapRef.current) {
+          mapRef.current.animateToRegion({
+            latitude: stations[0].latitude,
+            longitude: stations[0].longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          });
+        } else {
+          // Handle the case where the response is invalid
+          console.log('No charging stations on path.');
+        }
       }
-    }
   
       // Ensure that 'path' property exists in the response
       if (response && response.path !== undefined) {
@@ -226,6 +227,11 @@ const MapPage = () => {
       // Handle unexpected errors during the map press handling
       console.error('Error in handleMapPress:', error);
     }
+
+    const endTime = new Date();
+
+    const timeTaken = endTime.getTime() - beginTime.getTime();
+    console.log('The time taken is', timeTaken, 'ms!!!');
   };
 
   // Handle the press event on a marker to show an alert
@@ -236,6 +242,7 @@ const MapPage = () => {
 
   // Handle the drag end event on a marker
   const handleMarkerDragEnd = async (marker, newCoordinate) => {
+    const beginTime = new Date();
     try {
       // Find the index of the dragged marker in the markers array
       const markerIndex = markers.findIndex((m) => m.id === marker.id);
@@ -292,6 +299,11 @@ const MapPage = () => {
       // Handle unexpected errors during the marker drag handling
       console.error('Error in handleMarkerDragEnd:', error);
     }
+
+    const endTime = new Date();
+
+    const timeTaken = endTime.getTime() - beginTime.getTime();
+    console.log('The time taken is', timeTaken, 'ms!!!');
   };
 
   // Handle the press event on the "Start" button
