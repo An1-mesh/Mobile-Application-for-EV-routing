@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { SERVER_URL } from './config';
 
 const SignupPage = () => {
   const [username, setUsername] = useState('');
@@ -10,7 +11,7 @@ const SignupPage = () => {
 
   const navigation = useNavigation();
 
-  const endpoint = 'http://10.35.13.102:3000/signup';
+  const endpoint = SERVER_URL + 'signup';
   const handleSignup = async () => {
     if (username.trim() !== '' && password.trim() !== '') {
       try {

@@ -1,6 +1,7 @@
 // LoginPage.js
 import React, { useState } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet, Alert } from 'react-native';
+import { SERVER_URL } from './config';
 
 const LoginPage = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -10,7 +11,7 @@ const LoginPage = ({ navigation }) => {
   const handleLogin = async () => {
     if (username.trim() !== '' && password.trim() !== '') {
       try {
-        const response = await fetch('http://10.35.13.102:3000/login', {
+        const response = await fetch(SERVER_URL + 'login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

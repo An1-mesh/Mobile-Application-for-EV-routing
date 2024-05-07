@@ -1,6 +1,7 @@
 // DashboardPage.js
 import React, { useState } from 'react';
 import { View, ScrollView, Text, TextInput, Button, Alert } from 'react-native';
+import {SERVER_URL} from './config';
 
 const DashboardPage = () => {
   const [label, setLabel] = useState('');
@@ -57,8 +58,7 @@ const DashboardPage = () => {
       };
 
       console.log('Request data to add station:', requestData);
-
-      const endpoint = 'http://10.35.13.102:3000/add_stations';
+      const endpoint = SERVER_URL + 'add_stations';
 
       // Use a temporary variable to store the response
       let response;

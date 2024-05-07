@@ -10,6 +10,7 @@ import StartButton from './StartButton';
 import EndButton from './EndButton';
 import { sendDataToEndpoint } from './sendDataToEndpoint';
 import DashboardButton from './DashboardButton';
+import { SERVER_URL } from './config';
 
 const defaultBatteryCharge = 10000;
 
@@ -102,7 +103,7 @@ const MapPage = () => {
   const fetchChargingStations = async () => {
     try {
       // Make a GET request to the /show_stations endpoint
-      const response = await fetch('http://10.35.13.102:3000/show_stations');
+      const response = await fetch(SERVER_URL + 'show_stations');
       
       // Check if the response status is OK (200)
       if (response.ok) {
@@ -129,7 +130,7 @@ const MapPage = () => {
   const fetchRecentTrips = async () => {
     try {
       // Make a GET request to the /show_stations endpoint
-      const response = await fetch('http://10.35.13.102:3000/show_trips');
+      const response = await fetch(SERVER_URL + 'show_trips');
       
       // Check if the response status is OK (200)
       if (response.ok) {
@@ -311,7 +312,7 @@ const MapPage = () => {
       };
 
       console.log('Start journey request data:', requestData);
-      const endpoint = 'http://10.35.13.102:3000/start_trip';
+      const endpoint = SERVER_URL + 'start_trip';
 
       // Use a temporary variable to store the response
       let response;
@@ -361,7 +362,7 @@ const MapPage = () => {
       };
 
       // Define the endpoint for ending the trip
-      const endEndpoint = 'http://10.35.13.102:3000/end_trip';
+      const endEndpoint = SERVER_URL + 'end_trip';
 
       // Use a temporary variable to store the end trip response
       let endResponse;

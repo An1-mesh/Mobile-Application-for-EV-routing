@@ -1,7 +1,9 @@
+import { SERVER_URL } from "./config";
+
 // sendDataToEndpoint.js
 const sendDataToEndpoint = async (requestData) => {
   
-  const endpoint = 'http://10.35.13.102:3000/api';
+  const endpoint = SERVER_URL + 'api';
 
   try {
     const response = await fetch(endpoint, {
