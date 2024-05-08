@@ -3,10 +3,15 @@ import React, { useState } from 'react';
 import { View, ScrollView, Text, TextInput, Button, Alert } from 'react-native';
 import {SERVER_URL} from './config';
 
-const DashboardPage = () => {
+const DashboardPage = async () => {
   const [label, setLabel] = useState('');
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
+
+  const stationsEndpoint = SERVER_URL + 'show_stations';
+  console.log('Stations endpoint:', stationsEndpoint);
+  const recentTrips = await fetch(stationsEndpoint);
+  console.log('Recent Trips:', recentTrips);
 
   // Mock data for recent trips
   const recentTripsData = [
