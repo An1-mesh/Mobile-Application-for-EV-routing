@@ -1,49 +1,69 @@
 // DashboardPage.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, TextInput, Button, Alert } from 'react-native';
 import {SERVER_URL} from './config';
 
-const DashboardPage = async () => {
+const DashboardPage = () => {
   const [label, setLabel] = useState('');
   const [latitude, setLatitude] = useState('');
   const [longitude, setLongitude] = useState('');
+  const [recentTripsData, setRecentTripsData] = useState([]);
+  const [chargingStationsData, setChargingStationsData] = useState([]);
 
   const stationsEndpoint = SERVER_URL + 'show_stations';
+  const tripsEndpoint = SERVER_URL + 'show_trips';
   console.log('Stations endpoint:', stationsEndpoint);
-  const recentTrips = await fetch(stationsEndpoint);
-  console.log('Recent Trips:', recentTrips);
 
-  // Mock data for recent trips
-  const recentTripsData = [
-    { id: 1, tripName: 'Trip 1', distance: '30 miles' },
-    { id: 2, tripName: 'Trip 2', distance: '45 miles' },
-    { id: 3, tripName: 'Trip 3', distance: '20 miles' },
-    { id: 4, tripName: 'Trip 4', distance: '60 miles' },
-    { id: 5, tripName: 'Trip 5', distance: '15 miles' },
-    { id: 6, tripName: 'Trip 6', distance: '25 miles' },
-    { id: 7, tripName: 'Trip 7', distance: '50 miles' },
-    { id: 8, tripName: 'Trip 8', distance: '40 miles' },
-    { id: 9, tripName: 'Trip 9', distance: '35 miles' },
-    { id: 10, tripName: 'Trip 10', distance: '55 miles' },
-    { id: 11, tripName: 'Trip 11', distance: '22 miles' },
-    // ... (add more data)
-  ];
+  useEffect(() => {
+    const fetchRecentTrips = async () => {
+      try {
+        const response = await fetch(tripsEndpoint);
+        if (response.ok) {
+          const data = await response.json();
+          const newData  = data.map(x => {
+            return {
+              id: x.id,
+              startLocation: JSON.stringify(x.startLocation),
+              endLocation: JSON.stringify(x.endLocation)
+            }
+          })
+          setRecentTripsData(newData);
+        } else {
+          console.error('Error fetching recent trips:', response.statusText);
+          throw new Error('Error fetching recent trips');
+        }
+      } catch (error) {
+        console.error('Error fetching recent trips:', error);
+        throw new Error('Error fetching recent trips');
+      }
+    };
 
-  // Mock data for charging stations
-  const chargingStationsData = [
-    { id: 1, name: 'Station 1', location: 'City A' },
-    { id: 2, name: 'Station 2', location: 'City B' },
-    { id: 3, name: 'Station 3', location: 'City C' },
-    { id: 4, name: 'Station 4', location: 'City D' },
-    { id: 5, name: 'Station 5', location: 'City E' },
-    { id: 6, name: 'Station 6', location: 'City F' },
-    { id: 7, name: 'Station 7', location: 'City G' },
-    { id: 8, name: 'Station 8', location: 'City H' },
-    { id: 9, name: 'Station 9', location: 'City I' },
-    { id: 10, name: 'Station 10', location: 'City J' },
-    { id: 11, name: 'Station 11', location: 'City K' },
-    // ... (add more data)
-  ];
+    const fetchChargingStations = async () => {
+      try {
+        const response = await fetch(stationsEndpoint);
+        if (response.ok) {
+          const data = await response.json();
+          const newData = data.map(x => {
+            return {
+              id: x.id,
+              name: x.label,
+              location: JSON.stringify(x.location)
+            };
+          });
+          setChargingStationsData(newData);
+        } else {
+          console.error('Error fetching charging stations:', response.statusText);
+          throw new Error('Error fetching charging stations');
+        }
+      } catch (error) {
+        console.error('Error fetching charging stations:', error);
+        throw new Error('Error fetching charging stations');
+      }
+    };
+
+    fetchRecentTrips();
+    fetchChargingStations();
+  }, []);
 
   const handleAddStation = async () => {
     // Check if any of the input fields are empty
@@ -108,17 +128,17 @@ const DashboardPage = async () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           {/* Table header */}
           <View style={{ flexDirection: 'row', marginBottom: 8 }}>
-            <Text style={{ width: 100 }}>ID</Text>
-            <Text style={{ width: 150 }}>Trip Name</Text>
-            <Text style={{ width: 100 }}>Distance</Text>
+            <Text style={{ width: 50 }}>ID</Text>
+            <Text style={{ width: 150 }}>Start Location</Text>
+            <Text style={{ width: 150 }}>End Location</Text>
           </View>
 
           {/* Table data */}
           {recentTripsData.map((trip) => (
             <View key={trip.id} style={{ flexDirection: 'row', marginBottom: 8 }}>
-              <Text style={{ width: 100 }}>{trip.id}</Text>
-              <Text style={{ width: 150 }}>{trip.tripName}</Text>
-              <Text style={{ width: 100 }}>{trip.distance}</Text>
+              <Text style={{ width: 50 }}>{trip.id}</Text>
+              <Text style={{ width: 150 }}>{trip.startLocation}</Text>
+              <Text style={{ width: 150 }}>{trip.endLocation}</Text>
             </View>
           ))}
         </ScrollView>
